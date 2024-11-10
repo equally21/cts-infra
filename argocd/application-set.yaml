@@ -19,14 +19,13 @@ spec:
       name: '{{.cluster}}-cts'
     spec:
       project: cts
-      source:
-        repoURL: https://github.com/Andrew920/cts-infrastructure
-        targetRevision: HEAD
-        path: gitops/{{.cluster}}
-      source:
-        repoURL: https://github.com/Andrew920/cts-infrastructure
-        targetRevision: HEAD
-        path: gitops/global
+      sources:
+        - repoURL: https://github.com/Andrew920/cts-infrastructure
+          targetRevision: HEAD
+          path: gitops/{{.cluster}}
+        - repoURL: https://github.com/Andrew920/cts-infrastructure
+          targetRevision: HEAD
+          path: gitops/global
       destination:
         server: '{{.url}}'
         namespace: cts-namespace

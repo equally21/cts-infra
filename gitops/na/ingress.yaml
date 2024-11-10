@@ -5,6 +5,7 @@ metadata:
 spec:
   entryPoints:
     - web
+    - websecure
   routes:
     - match: Host(`cts.104.155.203.29.nip.io`)
       kind: Rule
