@@ -19,7 +19,7 @@ terraform plan
 terraform apply
 ```
 
-Omogoči se povezava do `86.61.45.0/24`, kjer se nahaja ArgoCD strežnik. Omogoči se tudi promet iz vseh IP-jev do strežnikov, kar omogoči dostop do CTS. Nato se kreirajo strežniki in v zadnjem koraku se generira `inventory` datoteka, ki se uporabi za konfiguracijo strežnikov s pomočjo Ansible.
+Omogoči se povezava od `86.61.45.0/24`, kjer se nahaja ArgoCD strežnik. Omogoči se tudi promet iz vseh IP-jev do strežnikov, kar omogoči dostop do CTS. Nato se kreirajo strežniki in v zadnjem koraku se generira `inventory` datoteka, ki se uporabi za konfiguracijo strežnikov s pomočjo Ansible.
 
 ## Konfiguracija infrastrukture
 
