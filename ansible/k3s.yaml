@@ -40,11 +40,11 @@
       delegate_to: localhost
       become: no
 
-  - name: Apply Kubernetes Argocd clusters
-    kubernetes.core.k8s:
-      state: present
-      src: "{{ item }}"
-    with_fileglob:
-      - "./clusters/*.yaml"
-    delegate_to: localhost
-    become: no
+    - name: Apply Kubernetes Argocd clusters
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ item }}"
+      with_fileglob:
+        - "./clusters/*.yaml"
+      delegate_to: localhost
+      become: no

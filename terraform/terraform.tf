@@ -11,11 +11,13 @@ locals {
   }
 }
 
+# Use public key for ssh access for Ansible
 data "local_file" "ssh_key" {
   filename = "${path.module}/id_rsa.pub"
 }
 
-resource "google_compute_firewall" "k3s" {
+# Give argocd access to the k3s clusters
+resource "google_compute_firewall" "k3s-api-ssh" {
   name    = "allow-k3s"
   network = "default"
 
@@ -27,7 +29,8 @@ resource "google_compute_firewall" "k3s" {
   source_ranges = ["86.61.45.0/24"]
 }
 
-resource "google_compute_firewall" "k3s" {
+# Allow access to the CTS
+resource "google_compute_firewall" "cts" {
   name    = "allow-cts"
   network = "default"
 
@@ -39,6 +42,7 @@ resource "google_compute_firewall" "k3s" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+# Create the VMs
 resource "google_compute_instance" "vms" {
   for_each = local.regions
 
@@ -62,21 +66,14 @@ resource "google_compute_instance" "vms" {
   }
 }
 
-output "instance_ips" {
-  value = {
-    for k, v in google_compute_instance.vms : k => {
-      external_ip = v.network_interface[0].access_config[0].nat_ip
-    }
-  }
-}
-
-resource "local_file" "ansible_inventory" {
-  content = templatefile("${path.module}/inventory.tpl",
+# Create the Ansible inventory file
+resource "local_file" "content" {
+  content = templatefile("${path.module}/inventory.tftpl",
     {
       na_ip   = google_compute_instance.vms["na"].network_interface[0].access_config[0].nat_ip
       eu_ip   = google_compute_instance.vms["eu"].network_interface[0].access_config[0].nat_ip
       asia_ip = google_compute_instance.vms["asia"].network_interface[0].access_config[0].nat_ip
     }
   )
-  filename = "${path.module}/inventory"
+  filename = "../ansible/${path.module}/inventory"
 }

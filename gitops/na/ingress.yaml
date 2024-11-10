@@ -6,7 +6,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`cts.34.55.250.141.nip.io`)
+    - match: Host(`cts.104.155.203.29.nip.io`)
       kind: Rule
       services:
         - name: cts-service
