@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: cts
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: cts
   template:
     metadata:
       labels:
-        app: nginx
+        app: cts
     spec:
       containers:
-      - name: nginx
+      - name: cts
         image: harbor.mymemorylog.com/cts/cts:0.1.45
         ports:
         - containerPort: 3000
