@@ -16,4 +16,4 @@ spec:
       - name: nginx
         image: harbor.mymemorylog.com/cts/cts:36
         ports:
-        - containerPort: 80
+        - containerPort: 3000

@@ -21,10 +21,22 @@ resource "google_compute_firewall" "k3s" {
 
   allow {
     protocol = "tcp"
-    ports    = ["22", "80", "443", "6443"]
+    ports    = ["22", "6443"]
   }
 
   source_ranges = ["86.61.45.0/24"]
+}
+
+resource "google_compute_firewall" "k3s" {
+  name    = "allow-cts"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
 }
 
 resource "google_compute_instance" "vms" {

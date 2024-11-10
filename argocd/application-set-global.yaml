@@ -20,9 +20,12 @@ spec:
     spec:
       project: cts
       source:
-        repoURL: https://github.com/Andrew920/cts-infra
+        repoURL: https://github.com/Andrew920/cts-infrastructure
         targetRevision: HEAD
         path: gitops/global
       destination:
         server: '{{.url}}'
         namespace: cts-namespace
+      syncPolicy:
+        automated:
+          prune: true
