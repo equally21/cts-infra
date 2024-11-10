@@ -1,0 +1,50 @@
+---
+- name: Install k3s
+  hosts: cts_nodes
+  become: true
+
+  tasks:
+    - name: Download k3s
+      get_url:
+        url: https://get.k3s.io
+        dest: /tmp/k3s-install.sh
+        mode: '0755'
+
+    - name: Install k3s
+      shell: |
+        /tmp/k3s-install.sh server
+
+    - name: Enable and start k3s
+      systemd:
+        name: k3s
+        enabled: yes
+        state: started
+
+    - name: Read kubeconfig from remote
+      slurp:
+        src: /etc/rancher/k3s/k3s.yaml
+      register: kubeconfig
+
+    - name: Get k3s certificate
+      set_fact:
+        certificate: "{{ (kubeconfig.content | b64decode | from_yaml).users[0].user['client-certificate-data'] }}"
+
+    - name: Get k3s key
+      set_fact:
+        key: "{{ (kubeconfig.content | b64decode | from_yaml).users[0].user['client-key-data'] }}"
+    
+    - name: Generate argocd cluster from jinja2 template
+      template:
+        src: cluster.j2
+        dest: ./clusters/k3s-{{  inventory_hostname  }}.yaml
+      delegate_to: localhost
+      become: no
+
+  - name: Apply Kubernetes Argocd clusters
+    kubernetes.core.k8s:
+      state: present
+      src: "{{ item }}"
+    with_fileglob:
+      - "./clusters/*.yaml"
+    delegate_to: localhost
+    become: no

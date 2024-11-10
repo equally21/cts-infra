@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: k3s-cluster-secret-{{ inventory_hostname }}
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+type: Opaque
+stringData:
+  name: "k3s-cluster-{{ inventory_hostname }}"
+  server: "https://{{ inventory_hostname }}:6443"
+  config: |
+    {
+      "tlsClientConfig": {
+        "insecure": true,
+        "certData": "{{  certificate  }}",
+        "keyData": "{{  key  }}"
+      }
+    }
