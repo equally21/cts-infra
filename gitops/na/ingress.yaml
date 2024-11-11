@@ -7,7 +7,7 @@ spec:
     - web
     - websecure
   routes:
-    - match: Host(`cts.104.155.203.29.nip.io`)
+    - match: Host(`cts.35.194.188.248.nip.io`)
       kind: Rule
       services:
         - name: cts-service
