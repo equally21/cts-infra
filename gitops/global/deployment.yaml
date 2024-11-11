@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: cts
-        image: harbor.mymemorylog.com/cts/cts:1.0.0-9fbfb185-8c1b-4d99-9a54-d42cfd59a96b
+        image: harbor.mymemorylog.com/cts/cts:1.0.0-d3f81498-ee93-499a-a030-36e6a6efee9c
         ports:
         - containerPort: 3000
