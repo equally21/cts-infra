@@ -19,11 +19,11 @@ terraform plan
 terraform apply -auto-approve
 ```
 
-Omogoči se povezava od `86.61.45.0/24`, kjer se nahaja ArgoCD strežnik. Omogoči se tudi promet iz vseh IP-jev do strežnikov, kar omogoči dostop do CTS. Nato se kreirajo strežniki in v zadnjem koraku se generira `inventory` datoteka, ki se uporabi za konfiguracijo strežnikov s pomočjo Ansible.
+Omogoči se povezava od `86.61.45.0/24`, kjer se nahaja ArgoCD strežnik. Omogoči se tudi promet iz vseh IP-jev do strežnikov, kar omogoči dostop do CTS. Nato se kreirajo strežniki in v zadnjem koraku se generira `inventory` datoteka, ki se uporabi za konfiguracijo strežnikov s pomočjo Ansible. Generira se tudi datoteka v kateri so definirane kubernetes gruče, ki se bodo dodale v ArgoCD.
 
 ## Konfiguracija infrastrukture
 
-Infrastruktura se konfigurira s pomočjo Ansible. Datoteka `inventory` se generira v prejšnjem koraku. V datoteki je potrebno popraviti le še pot do zasebnega ssh ključa, ki omogoča dostop do strežnikov. Za konfiguracijo je potrebno zagnati naslednje korake:
+Infrastruktura se konfigurira s pomočjo Ansible. Datoteka `inventory` se generira v prejšnjem koraku. Ta skripta doda tudi vse potrebne ArgoCD vire. V datoteki je potrebno popraviti le še pot do zasebnega ssh ključa, ki omogoča dostop do strežnikov. Za konfiguracijo je potrebno zagnati naslednje korake:
 
 ```bash
 # Ta okoljska spremenljivka izklopi preverjanje SSH ključev v ansible. To je uporabno v testnih okoljih za avtomatizacijo povezovanja na nove strežnike brez ročnega potrjevanja njihovih ključev
@@ -41,8 +41,6 @@ ansible-playbook -i inventory k3s.yaml
 
 ## Konfiguracija Kubernetes
 
-Vsi kubernetes viri so shranjeni v gitops mapi. Ta mapa vsebuje mapo global, kjer se nahajajo vse datoteke, ki so enake za vse postavitve. Ima pa vsaka kubernetes gruča tudi svojo mapo, kjer se nahajajo viri specifični zanjo. Potrebno je zamenjati imena kubernetes gruč v datoteki `argocd/application-set.yaml`.
+Vsi kubernetes viri so shranjeni v gitops mapi. Ta mapa vsebuje mapo global, kjer se nahajajo vse datoteke, ki so enake za vse postavitve. Ima pa vsaka kubernetes gruča tudi svojo mapo, kjer se nahajajo viri specifični zanjo. Te viri so avtomatsko dodani v kubernetes gruče s pomočjo ArgoCD.
 
-V kubernetes je potrebno dodati vse vire, ki se nahajajo v mapi argocd. Nato ArgoCD skrbi za pravilno stanje teh virov in jih avtomatko posodablja. Tako deluje zvezna dostava. Zvezna dostava, narejena z CircleCI, posodobi `deployment` vir v tem repozitoriju in posledično posodobi CTS na vseh strežnikih.
-
-Kubernetes `IngressRoute` viri imajo vpisanje domene s pomočjo nip.io. Potrebno je prilagoditi tudi te datoteke z novimi domenami, ki se bodo prevedle v pravilne ip naslove. Nahajajo se v `gitops/<ime_strežnika>/`
+Kubernetes `IngressRoute` viri imajo vpisanje domene s pomočjo nip.io. Potrebno je prilagoditi te vire z novimi domenami, ki se bodo prevedle v pravilne ip naslove. Nahajajo se v `gitops/<ime_strežnika>/`

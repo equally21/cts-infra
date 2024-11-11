@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: cts-application-set
+  namespace: argocd
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -9,21 +10,21 @@ spec:
   - list:
       elements:
       - cluster: na
-        url: https://34.69.215.5:6443
+        url: https://${na_ip}:6443
       - cluster: eu
-        url: https://34.147.65.8:6443
+        url: https://${eu_ip}:6443
       - cluster: asia
-        url: https://104.155.203.29:6443
+        url: https://${asia_ip}:6443
   template:
     metadata:
       name: '{{.cluster}}-cts'
     spec:
       project: cts
       sources:
-        - repoURL: https://github.com/Andrew920/cts-infrastructure
+        - repoURL: https://gitlab.com:cts2782346/cts-infrastructure.git
           targetRevision: HEAD
           path: gitops/{{.cluster}}
-        - repoURL: https://github.com/Andrew920/cts-infrastructure
+        - repoURL: https://gitlab.com:cts2782346/cts-infrastructure.git
           targetRevision: HEAD
           path: gitops/global
       destination:

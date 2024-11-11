@@ -1,7 +1,22 @@
 ---
-- name: Install k3s
+- name: Configure k3s
   hosts: cts_nodes
   become: true
+
+  pre_tasks:
+    - name: Remove cluster directory to get rid of old clusters
+      file:
+        path: "./clusters"
+        state: absent
+      delegate_to: localhost
+      run_once: true
+
+    - name: Recreate cluster directory
+      file:
+        path: "./clusters"
+        state: directory
+      delegate_to: localhost
+      run_once: true
 
   tasks:
     - name: Download k3s
@@ -48,3 +63,34 @@
         - "./clusters/*.yaml"
       delegate_to: localhost
       become: no
+      run_once: true
+
+    - name: Apply Argocd project
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ item }}"
+      with_fileglob:
+        - "../argocd/project.yaml"
+      delegate_to: localhost
+      become: no
+      run_once: true
+
+    - name: Apply Argocd repository
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ item }}"
+      with_fileglob:
+        - "../argocd/repository.yaml"
+      delegate_to: localhost
+      become: no
+      run_once: true
+
+    - name: Apply Argocd Application Set
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ item }}"
+      with_fileglob:
+        - "../argocd/application-set.yaml"
+      delegate_to: localhost
+      become: no
+      run_once: true

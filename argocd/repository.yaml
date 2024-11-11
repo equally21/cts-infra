@@ -7,4 +7,4 @@ metadata:
     argocd.argoproj.io/secret-type: repository
 stringData:
   type: git
-  url: https://github.com/Andrew920/cts-infrastructure
+  url: https://gitlab.com:cts2782346/cts-infrastructure.git

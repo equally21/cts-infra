@@ -39,3 +39,5 @@ terraform.rc
 */clusters/*
 
 *id_rsa*
+
+inventory

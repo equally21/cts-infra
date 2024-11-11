@@ -67,8 +67,8 @@ resource "google_compute_instance" "vms" {
 }
 
 # Create the Ansible inventory file
-resource "local_file" "content" {
-  content = templatefile("${path.module}/inventory.tftpl",
+resource "local_file" "inventory" {
+  content = templatefile("${path.module}/templates/inventory.tftpl",
     {
       na_ip   = google_compute_instance.vms["na"].network_interface[0].access_config[0].nat_ip
       eu_ip   = google_compute_instance.vms["eu"].network_interface[0].access_config[0].nat_ip
@@ -76,4 +76,16 @@ resource "local_file" "content" {
     }
   )
   filename = "../ansible/${path.module}/inventory"
+}
+
+# Create ArgoCD ApplicationSet
+resource "local_file" "ApplicationSet" {
+  content = templatefile("${path.module}/templates/application-set.tftpl",
+    {
+      na_ip   = google_compute_instance.vms["na"].network_interface[0].access_config[0].nat_ip
+      eu_ip   = google_compute_instance.vms["eu"].network_interface[0].access_config[0].nat_ip
+      asia_ip = google_compute_instance.vms["asia"].network_interface[0].access_config[0].nat_ip
+    }
+  )
+  filename = "../argocd/${path.module}/application-set.yaml"
 }
