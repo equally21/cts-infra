@@ -9,6 +9,7 @@
         path: "./clusters"
         state: absent
       delegate_to: localhost
+      become: no
       run_once: true
 
     - name: Recreate cluster directory
@@ -16,6 +17,7 @@
         path: "./clusters"
         state: directory
       delegate_to: localhost
+      become: no
       run_once: true
 
   tasks:

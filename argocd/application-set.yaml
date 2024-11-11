@@ -10,11 +10,11 @@ spec:
   - list:
       elements:
       - cluster: na
-        url: https://${na_ip}:6443
+        url: https://34.55.4.110:6443
       - cluster: eu
-        url: https://${eu_ip}:6443
+        url: https://34.32.187.190:6443
       - cluster: asia
-        url: https://${asia_ip}:6443
+        url: https://35.194.188.248:6443
   template:
     metadata:
       name: '{{.cluster}}-cts'

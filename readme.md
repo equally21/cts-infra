@@ -14,7 +14,11 @@ V mapi terraform se nahaja konfiguracija za postavitev. V konfiguraciji `terrafo
 # Prijava v google cloud
 gcloud auth application-default login
 
+# Potrebno se je postaviti v mapo terraform
+cd terraform
+
 # Postavitev strežnikov
+terraform init
 terraform plan
 terraform apply -auto-approve
 ```
@@ -26,6 +30,9 @@ Omogoči se povezava od `86.61.45.0/24`, kjer se nahaja ArgoCD strežnik. Omogo�
 Infrastruktura se konfigurira s pomočjo Ansible. Datoteka `inventory` se generira v prejšnjem koraku. Ta skripta doda tudi vse potrebne ArgoCD vire. V datoteki je potrebno popraviti le še pot do zasebnega ssh ključa, ki omogoča dostop do strežnikov. Za konfiguracijo je potrebno zagnati naslednje korake:
 
 ```bash
+# Potrebno se je postaviti v mapo ansible
+cd ansible
+
 # Ta okoljska spremenljivka izklopi preverjanje SSH ključev v ansible. To je uporabno v testnih okoljih za avtomatizacijo povezovanja na nove strežnike brez ročnega potrjevanja njihovih ključev
 export ANSIBLE_HOST_KEY_CHECKING=False
 
